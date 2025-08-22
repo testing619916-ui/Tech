@@ -330,7 +330,8 @@ function restartGame() {
 // Organizer-only: Show participant panel after password
 document.getElementById("organizerLoginBtn").addEventListener("click", function() {
   const password = prompt("Enter organizer password:");
-  if (password === "YourSecret123") { // change this to your secret password
+  if (password === "Heyden@123") {
+ 
     document.getElementById("organizerPanel").style.display = "block";
     updateParticipantList();
   } else {
@@ -368,3 +369,4 @@ function exportParticipants() {
 </script>
 </body>
 </html>
+
