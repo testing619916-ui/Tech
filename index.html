@@ -82,6 +82,23 @@ button:hover {
   border-radius: 6px;
   border: 1px solid #ccc;
 }
+
+/* Organizer panel */
+#organizerPanel {
+  display: none;
+  margin-top: 15px;
+  background: #222;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+#organizerPanel h3 {
+  margin: 0 0 10px 0;
+}
+
+#organizerLoginBtn {
+  margin-top: 10px;
+}
 </style>
 </head>
 <body>
@@ -92,6 +109,16 @@ button:hover {
   <input type="text" id="playerName" placeholder="Enter your Name">
   <input type="text" id="playerClass" placeholder="Enter your Class">
   <button onclick="startGame()">Start Game</button>
+</div>
+
+<!-- Organizer Login -->
+<button id="organizerLoginBtn">Organizer Login</button>
+
+<!-- Organizer-only panel -->
+<div id="organizerPanel">
+  <h3>Participants List</h3>
+  <div id="participantList"></div>
+  <button onclick="exportParticipants()">Download CSV</button>
 </div>
 
 <!-- Centered puzzle container -->
@@ -147,6 +174,7 @@ function startGame() {
   initPuzzle();
 }
 
+// Puzzle initialization
 function initPuzzle() {
   pieces = [];
   for (let r = 0; r < rows; r++) {
@@ -299,13 +327,27 @@ function restartGame() {
   document.getElementById("instructions").style.display = "none";
 }
 
-// Organizer-only: Export participant list (Ctrl+E / Cmd+E)
-document.addEventListener("keydown", function(e) {
-  if ((e.ctrlKey || e.metaKey) && e.key === "e") {
-    exportParticipants();
+// Organizer-only: Show participant panel after password
+document.getElementById("organizerLoginBtn").addEventListener("click", function() {
+  const password = prompt("Enter organizer password:");
+  if (password === "YourSecret123") { // change this to your secret password
+    document.getElementById("organizerPanel").style.display = "block";
+    updateParticipantList();
+  } else {
+    alert("Incorrect password!");
   }
 });
 
+function updateParticipantList() {
+  const listDiv = document.getElementById("participantList");
+  if (participants.length === 0) {
+    listDiv.innerHTML = "No participants yet.";
+  } else {
+    listDiv.innerHTML = participants.map(p => `${p.name} (${p.class})`).join("<br>");
+  }
+}
+
+// Export participants CSV
 function exportParticipants() {
   if (participants.length === 0) {
     alert("No participants yet.");
